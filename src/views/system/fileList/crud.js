@@ -86,6 +86,15 @@ export const crudOptions = (vm) => {
         },
         width: 220
       },
+      // {
+      //   title: 'json文件地址',
+      //   key: 'json_result',
+      //   type: 'file-uploader',
+      //   search: {
+      //     disabled: true
+      //   },
+      //   width: 220
+      // },
       {
         title: '文件MD5',
         key: 'md5sum',

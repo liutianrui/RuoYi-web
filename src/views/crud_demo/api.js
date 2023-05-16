@@ -1,8 +1,7 @@
 import { request } from '@/api/service'
+export const urlPrefix = '/api/dataSet/'
 
-export const urlPrefix = '/api/crud_demo/'
-
-export function GetList (query) {
+export function GetList(query) {
   return request({
     url: urlPrefix,
     method: 'get',
@@ -10,7 +9,7 @@ export function GetList (query) {
   })
 }
 
-export function AddObj (obj) {
+export function AddObj(obj) {
   return request({
     url: urlPrefix,
     method: 'post',
@@ -18,7 +17,7 @@ export function AddObj (obj) {
   })
 }
 
-export function UpdateObj (obj) {
+export function UpdateObj(obj) {
   return request({
     url: urlPrefix + obj.id + '/',
     method: 'put',
@@ -26,7 +25,7 @@ export function UpdateObj (obj) {
   })
 }
 
-export function DelObj (id) {
+export function DelObj(id) {
   return request({
     url: urlPrefix + id + '/',
     method: 'delete',
@@ -41,3 +40,4 @@ export function Download() {
     responseType: 'blob'
   })
 }
+
