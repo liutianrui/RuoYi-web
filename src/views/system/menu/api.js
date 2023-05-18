@@ -1,11 +1,3 @@
-/*
- * @创建文件时间: 2021-06-01 22:41:21
- * @Auther: 猿小天
- * @最后修改人: 猿小天
- * @最后修改时间: 2021-07-29 19:23:33
- * 联系Qq:1638245306
- * @文件介绍: 菜单管理接口
- */
 import { request } from '@/api/service'
 
 export const urlPrefix = '/api/system/menu/'

@@ -1,11 +1,3 @@
-<!--
- * @创建文件时间: 2021-08-14 17:37:36
- * @Auther: 猿小天
- * @最后修改人: 猿小天
- * @最后修改时间: 2021-08-14 21:27:12
- * 联系Qq:1638245306
- * @文件介绍: 图片管理
--->
 <template>
   <d2-container :class="{ 'page-compact': crud.pageOptions.compact }">
     <d2-crud-x
