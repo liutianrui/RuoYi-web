@@ -36,11 +36,11 @@
       <el-button v-if="isShowJson" style="margin-left: 10px;float: left" size="small" type="warning" plain
                  @click="jsonDownload"><i class="el-icon-download"/>下载预测结果
       </el-button>
-      <div v-if="macro_F1" style="float:left;padding-left:50px;margin: auto">
+      <div v-if="macro_F1" style="float:left;padding-left:100px;margin: auto">
         <h2>预测结果:</h2>
-        <h2>macro_F1: {{ macro_F1 * 100 }}%</h2>
-        <h2>macro_P: {{ macro_P * 100 }}%</h2>
-        <h2>macro_R: {{ macro_R * 100 }}%</h2>
+        <h2>macro_F1: {{ macro_F1 }}%</h2>
+        <h2>macro_P: {{ macro_P }}%</h2>
+        <h2>macro_R: {{ macro_R }}%</h2>
       </div>
     </div>
     <br>
@@ -146,12 +146,17 @@ export default {
         this.label3 = analysisResult.LABEL3
         this.label4 = analysisResult.LABEL4
         this.label5 = analysisResult.LABEL5
-        this.macro_F1 = analysisResult.macro_F1
-        this.macro_P = analysisResult.macro_P
-        this.macro_R = analysisResult.macro_R
+        this.macro_F1 = Number(analysisResult.macro_F1 * 100).toFixed(2)
+        this.macro_P = Number(analysisResult.macro_P * 100).toFixed(2)
+        this.macro_R = Number(analysisResult.macro_R * 100).toFixed(2)
         this.precision_i = analysisResult.precision_i
         this.recall_i = analysisResult.recall_i
-
+console.log(this.macro_P )
+        // 四舍五入 保留两位小数
+        for (let i = 0; i < this.precision_i.length; i++){
+          this.precision_i[i] = this.precision_i[i].toFixed(2)
+          this.recall_i[i] = this.recall_i[i].toFixed(2)
+        }
         // 图形展示
         this.drawPie()
         this.drawBar1()
@@ -350,7 +355,19 @@ export default {
               },
             ],
             // data: this.precision_i,
-            type: 'bar'
+            type: 'bar',
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true, //开启显示数值
+                  position: 'top', //数值在上方显示
+                  textStyle: {  //数值样式
+                    // color: '#D1DBFF',   //字体颜色
+                    fontSize: 14  //字体大小
+                  }
+                }
+              }
+            }
           }
         ]
       })
@@ -412,7 +429,19 @@ export default {
               },
             ],
             // data: this.precision_i,
-            type: 'bar'
+            type: 'bar',
+            itemStyle: {
+              normal: {
+                label: {
+                  show: true, //开启显示数值
+                  position: 'top', //数值在上方显示
+                  textStyle: {  //数值样式
+                    // color: '#D1DBFF',   //字体颜色
+                    fontSize: 14  //字体大小
+                  }
+                }
+              }
+            }
           }
         ]
       })
