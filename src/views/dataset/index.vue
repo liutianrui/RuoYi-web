@@ -49,6 +49,45 @@
     <div style="float: left" id="pieChart" :style="{width: '450px', height: '450px'}"></div>
     <div style="float: left" id="bar1Chart" :style="{width: '400px', height: '400px'}"></div>
     <div style="float: left" id="bar2Chart" :style="{width: '400px', height: '400px'}"></div>
+    <!--模型训练-->
+    <el-dialog
+      title="模型训练"
+      :visible.sync="dialogVisible"
+      width="30%"
+      show-close = "false"
+      :before-close="handleClose">
+      <el-result icon="warning" title="提示" subTitle="训练时间耗时较长">
+        <template slot="extra">
+<!--          <el-button type="primary" size="medium">返回</el-button>-->
+        </template>
+      </el-result>
+      <el-upload
+        style="float: left"
+        class="upload-demo"
+        ref="upload_train"
+        :action="trainDataSetURL"
+        :headers="uploadHeaders"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :before-remove="beforeRemove"
+        :on-success='successUploadTrain'
+        :on-error='errorUpload'
+        :before-upload='beforeUpload'
+        :limit=1
+        accept=".csv"
+        :on-exceed="handleExceed"
+        :auto-upload="false"
+        :file-list="fileList_train">
+        <el-button style="margin-left: 10px;" size="small" type="primary" slot="trigger">选择模型</el-button>
+                <div slot="tip" class="el-upload__tip">只能上传csv文件</div>
+        <el-button style="margin-left: 10px;" size="small" type="danger"  @click="submitUploadTrain(false)">训练
+        </el-button>
+      </el-upload>
+      <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">关 闭</el-button>
+<!--    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>-->
+  </span>
+    </el-dialog>
   </d2-container>
 </template>
 
@@ -65,14 +104,16 @@ export default {
   data () {
     return {
       baseURL: util.baseURL() + 'api/system/file/', // 文件上传路径
-      // trainDataSetURL: util.baseURL() + 'api/dataset/trainDataSet/', // 模型训练路径
+      trainDataSetURL: util.baseURL() + 'api/dataset/trainDataSet/', // 模型训练路径
       uploadHeaders: {
         Authorization: 'JWT ' + util.cookies.get('token')
       },
+      dialogVisible: false,
       macro_F1: null,
       macro_P: null,
       macro_R: null,
       fileList: [],
+      fileList_train: [],
       label0: '',
       label1: '',
       label2: '',
@@ -151,7 +192,6 @@ export default {
         this.macro_R = Number(analysisResult.macro_R * 100).toFixed(2)
         this.precision_i = analysisResult.precision_i
         this.recall_i = analysisResult.recall_i
-console.log(this.macro_P )
         // 四舍五入 保留两位小数
         for (let i = 0; i < this.precision_i.length; i++){
           this.precision_i[i] = this.precision_i[i].toFixed(2)
@@ -190,19 +230,8 @@ console.log(this.macro_P )
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        Loading.service({
-          fullscreen: true,
-          text: '训练模型中，耗时较长，请耐心等待...'
-        })// 打开遮罩层
-        this.trainDataSetRequest().then((response) => {
-          this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
-            Loading.service().close()
-          })
-          this.$message({
-            message: '模型训练完毕，请上传测试集',
-            type: 'success'
-          })
-        })
+        this.dialogVisible = true
+
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -237,6 +266,38 @@ console.log(this.macro_P )
         URL.revokeObjectURL(elink.href) // 释放URL 对象
         document.body.removeChild(elink)
       })
+    },
+    successUploadTrain (response, file, fileList) {
+      this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+        Loading.service().close()
+      })
+      this.$message({
+        message: '模型训练完毕，请上传测试集',
+        type: 'success'
+      })
+    },
+    async submitUploadTrain () {
+      this.$refs.upload_train.submit()
+      Loading.service({
+        fullscreen: true,
+        text: '训练模型中，耗时较长，请耐心等待...'
+      })// 打开遮罩层
+      // this.trainDataSetRequest().then((response) => {
+      //   this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
+      //     Loading.service().close()
+      //   })
+      //   this.$message({
+      //     message: '模型训练完毕，请上传测试集',
+      //     type: 'success'
+      //   })
+      // })
+    },
+    handleClose(done) {
+      // this.$confirm('确认关闭？')
+      //   .then(_ => {
+      //     done();
+      //   })
+      //   .catch(_ => {});
     },
     //饼图初始化
     drawPie () {
