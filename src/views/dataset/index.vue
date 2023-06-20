@@ -54,7 +54,7 @@
       title="模型训练"
       :visible.sync="dialogVisible"
       width="30%"
-      show-close = "false"
+      :show-close = "false"
       :before-close="handleClose">
       <el-result icon="warning" title="提示" subTitle="训练时间耗时较长">
         <template slot="extra">
@@ -271,12 +271,20 @@ export default {
       this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
         Loading.service().close()
       })
+      this.dialogVisible = false
       this.$message({
         message: '模型训练完毕，请上传测试集',
         type: 'success'
       })
     },
     async submitUploadTrain () {
+      if (this.$refs.upload_train._data.uploadFiles.length == 0){
+        this.$message({
+          type: 'warning',
+          message: '请先上传模型！'
+        })
+        return
+      }
       this.$refs.upload_train.submit()
       Loading.service({
         fullscreen: true,
