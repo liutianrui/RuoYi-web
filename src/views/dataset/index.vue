@@ -78,7 +78,7 @@
         :on-exceed="handleExceed"
         :auto-upload="false"
         :file-list="fileList_train">
-        <el-button style="margin-left: 10px;" size="small" type="primary" slot="trigger">选择模型</el-button>
+        <el-button style="margin-left: 10px;" size="small" type="primary" slot="trigger">上传训练数据</el-button>
                 <div slot="tip" class="el-upload__tip">只能上传csv文件</div>
         <el-button style="margin-left: 10px;" size="small" type="danger"  @click="submitUploadTrain(false)">训练
         </el-button>
