@@ -22,7 +22,7 @@
         :on-success='successUpload'
         :on-error='errorUpload'
         :before-upload='beforeUpload'
-        limit="1"
+        :limit="1"
         accept=".csv"
         :on-exceed="handleExceed"
         :auto-upload="false"
